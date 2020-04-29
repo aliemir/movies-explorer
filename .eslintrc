@@ -8,6 +8,7 @@
   ],
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
-    "semi": "off"
+    "semi": "off",
+    "jsx-a11y/anchor-is-valid": "off"
   }
 }

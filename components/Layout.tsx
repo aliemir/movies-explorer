@@ -15,6 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <style jsx>
         {`
           .page-layout {
+            box-sizing: border-box;
             padding: 10px;
           }
         `}

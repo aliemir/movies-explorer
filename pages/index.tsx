@@ -3,9 +3,14 @@ import React from 'react'
 import { NextPage, GetServerSideProps } from 'next'
 import fetch from 'isomorphic-unfetch'
 import Link from 'next/link'
+import Head from 'next/head'
 import titleToURL from '../utils/titleToURL'
+import Header from '../components/Header'
+import getGenre from '../utils/getGenre'
+import theme from '../styles/theme'
 
 interface MovieItem {
+  posterPath: string | undefined
   genres: number[]
   title: string
   id: number
@@ -18,11 +23,20 @@ interface AppProps {
 const Index: NextPage<AppProps> = ({ movies }) => {
   return (
     <div>
-      <h1>Movies</h1>
+      <Head>
+        <title>Discover</title>
+      </Head>
+      <Header title="Discover" />
       <ul className="movie-list">
         {movies.map((m) => (
           <li key={m.id}>
             <div className="movie-item">
+              {!!m.posterPath && (
+                <img
+                  src={`https://image.tmdb.org/t/p/w154/${m.posterPath}`}
+                  alt={`${m.title} poster`}
+                />
+              )}
               <div className="movie-title">
                 <Link
                   href="/movie/[id]/[title]"
@@ -31,7 +45,13 @@ const Index: NextPage<AppProps> = ({ movies }) => {
                   <a>{m.title}</a>
                 </Link>
               </div>
-              <div className="movie-genre">{m.genres.join(', ')}</div>
+              <div className="movie-genre">
+                {m.genres
+                  .map((g) => getGenre(g))
+                  .map((g) => (
+                    <div className="genre-tag">{g}</div>
+                  ))}
+              </div>
             </div>
           </li>
         ))}
@@ -59,7 +79,16 @@ const Index: NextPage<AppProps> = ({ movies }) => {
         .movie-title a {
           font-weight: bold;
           text-decoration: none;
-          color: black;
+        }
+        .movie-genre {
+          display: flex;
+        }
+        .genre-tag {
+          padding: 5px 8px;
+          border-radius: 15px;
+          font-size: 12px;
+          border: 1px solid ${theme.colors.border};
+          margin-right: 6px;
         }
       `}</style>
     </div>
@@ -76,10 +105,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     })
 
   const movies: MovieItem[] = data.results?.map(
-    (m: { genre_ids: number[]; original_title: string; id: number }) => {
+    (m: {
+      poster_path: string | null
+      genre_ids: number[]
+      title: string
+      id: number
+    }) => {
       const movie: MovieItem = {
+        posterPath: m.poster_path ?? undefined,
         genres: m.genre_ids,
-        title: m.original_title,
+        title: m.title,
         id: m.id,
       }
       return movie
