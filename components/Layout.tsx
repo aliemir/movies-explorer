@@ -15,6 +15,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <style jsx>
         {`
           .page-layout {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 840px;
             box-sizing: border-box;
             padding: 10px;
           }

@@ -7,13 +7,14 @@ import Head from 'next/head'
 import css from 'styled-jsx'
 import titleToURL from '../utils/titleToURL'
 import Header from '../components/Header'
-import { genres, Genre } from '../utils/getGenre'
+import getGenre, { genres, Genre } from '../utils/getGenre'
 import theme from '../styles/theme'
 import Genres from '../components/Genres'
 
 interface MovieItem {
   posterPath: string | undefined
   genres: number[]
+  rating: number
   title: string
   id: number
 }
@@ -44,62 +45,129 @@ const Index: NextPage<AppProps> = ({ movies }) => {
       />
       <div className="movie-list">
         {movies.map((m) => (
-          <div key={m.id}>
-            <div className="movie-item">
-              {!!m.posterPath && (
+          <div key={m.id} className="movie-item">
+            <div className="movie-poster">
+              {!!m.posterPath ? (
                 <img
                   src={`https://image.tmdb.org/t/p/w154/${m.posterPath}`}
                   alt={`${m.title} poster`}
                 />
+              ) : (
+                <div className="fallback" />
               )}
+            </div>
+            <div className="movie-info">
               <div className="movie-title">
                 <Link
                   href="/movie/[id]/[title]"
                   as={`/movie/${m.id}/${titleToURL(m.title)}`}
                 >
-                  <a>{m.title}</a>
+                  <a className="line-limit limit-three">{m.title}</a>
                 </Link>
               </div>
-              {/* <div className="movie-genre">
-                {m.genres
-                  .map((g) => getGenre(g))
-                  .map((g) => (
-                    <div className="genre-tag" key={g}>
-                      {g}
-                    </div>
-                  ))}
-              </div> */}
+              <div className="movie-info-detail">
+                <div className="movie-rating">{`${m.rating}/10`}</div>
+                <div className="movie-genres">
+                  <span className="genre line-limit limit-two">
+                    {m.genres.map((g) => getGenre(g)).join(', ')}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
       <style jsx>{`
         .movie-list {
-          padding: 10px 0;
+          padding: 20px 0;
           display: flex;
           flex-flow: row wrap;
           justify-content: space-around;
         }
         .movie-item {
+          width: 100%;
+          height: 138px;
+          max-width: 350px;
+          display: flex;
+          flex-direction: row;
+          border-radius: 12px;
+          box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+          padding: 0 15px;
+          margin: 15px;
+          margin-bottom: 30px;
+        }
+        .movie-poster {
+          margin-top: -25px;
+        }
+        .movie-poster > * {
+          border-radius: 10px;
+          box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5);
+        }
+        .movie-poster img {
+          width: 96px;
+        }
+        .movie-poster .fallback {
+          width: 96px;
+          height: 144px;
+          background: #7b4397; /* fallback for old browsers */
+          background: linear-gradient(to right, #7b4397, #dc2430);
+        }
+        .movie-info {
+          width: 100%;
+          padding-left: 10px;
+          padding-top: 10px;
+          padding-bottom: 15px;
+          display: flex;
+          flex-direction: column;
+        }
+        .movie-title {
+          text-align: left;
+          font-weight: ${theme.fontWeight.bold};
+          color: ${theme.colors.primaryB};
+          text-style: none;
+        }
+        .movie-title a {
+          text-decoration: none;
+          color: unset;
+        }
+        .movie-info-detail {
+          margin-top: auto;
+          padding-bottom: 10px;
+        }
+        .movie-rating {
+          font-weight: ${theme.fontWeight.semi};
+          font-size: 0.7em;
+          padding-bottom: 10px;
+        }
+        .movie-genres {
+          font-size: 0.7em;
+          color: ${theme.colors.primaryC};
+        }
+        .line-limit {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .line-limit.limit-two {
+          -webkit-line-clamp: 2;
+        }
+        .line-limit.limit-three {
+          -webkit-line-clamp: 3;
+        }
+
+         {
+          /* .movie-item {
           width: 154px;
           border-radius: 5px;
           background-color: #fefefe;
           margin: 10px 0;
           transition: 0.3s box-shadow ease;
+        } */
         }
-        .movie-item:hover {
+         {
+          /* .movie-item:hover {
           box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.75);
-        }
-        .movie-title {
-          text-align: center;
-        }
-        .movie-title a {
-          font-weight: bold;
-          text-decoration: none;
-        }
-        .movie-genre {
-          display: flex;
-          flex-wrap: wrap;
+        } */
         }
       `}</style>
     </div>
@@ -119,12 +187,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     (m: {
       poster_path: string | null
       genre_ids: number[]
+      vote_average: number
       title: string
       id: number
     }) => {
       const movie: MovieItem = {
         posterPath: m.poster_path ?? undefined,
         genres: m.genre_ids,
+        rating: m.vote_average,
         title: m.title,
         id: m.id,
       }

@@ -52,7 +52,6 @@ const styles = css`
 `
 
 const GenreTag: React.FC<GenreTagProps> = ({
-  id,
   name,
   selected,
   onClick = (): void => {
@@ -63,7 +62,6 @@ const GenreTag: React.FC<GenreTagProps> = ({
     <>
       <button
         className={`genre-tag ${selected && 'selected'}`}
-        key={id}
         onClick={(): void => onClick()}
       >
         {name}

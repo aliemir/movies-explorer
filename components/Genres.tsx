@@ -66,6 +66,7 @@ const Genres: React.FC<GenresProps> = ({
         {genres.map((g) => (
           <GenreTag
             {...g}
+            key={g.id}
             onClick={(): void => onSelect(g)}
             selected={selectedGenres.length === 0 || selectedGenres.includes(g)}
           />
