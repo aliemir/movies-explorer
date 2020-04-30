@@ -4,9 +4,10 @@ import { NextPage, GetServerSideProps } from 'next'
 import fetch from 'isomorphic-unfetch'
 import Link from 'next/link'
 import Head from 'next/head'
+import css from 'styled-jsx'
 import titleToURL from '../utils/titleToURL'
 import Header from '../components/Header'
-import getGenre from '../utils/getGenre'
+import getGenre, { genres } from '../utils/getGenre'
 import theme from '../styles/theme'
 
 interface MovieItem {
@@ -27,9 +28,20 @@ const Index: NextPage<AppProps> = ({ movies }) => {
         <title>Discover</title>
       </Head>
       <Header title="Discover" />
-      <ul className="movie-list">
+      <div className="genres-wrapper">
+        <div className="genres-wrapper-shade left"></div>
+        <div className="genres-wrapper-shade right"></div>
+        <div className="genre-tags">
+          {genres.map((g) => (
+            <div className="genre-tag" key={g.id}>
+              {g.name}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="movie-list">
         {movies.map((m) => (
-          <li key={m.id}>
+          <div key={m.id}>
             <div className="movie-item">
               {!!m.posterPath && (
                 <img
@@ -45,29 +57,28 @@ const Index: NextPage<AppProps> = ({ movies }) => {
                   <a>{m.title}</a>
                 </Link>
               </div>
-              <div className="movie-genre">
+              {/* <div className="movie-genre">
                 {m.genres
                   .map((g) => getGenre(g))
                   .map((g) => (
-                    <div className="genre-tag">{g}</div>
+                    <div className="genre-tag" key={g}>
+                      {g}
+                    </div>
                   ))}
-              </div>
+              </div> */}
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       <style jsx>{`
-        ul.movie-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-        ul.movie-list > li {
-          padding: 0;
-          margin: 0;
+        .movie-list {
+          padding: 10px 0;
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-around;
         }
         .movie-item {
-          padding: 10px 20px;
+          width: 154px;
           border-radius: 5px;
           background-color: #fefefe;
           margin: 10px 0;
@@ -76,19 +87,66 @@ const Index: NextPage<AppProps> = ({ movies }) => {
         .movie-item:hover {
           box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.75);
         }
+        .movie-title {
+          text-align: center;
+        }
         .movie-title a {
           font-weight: bold;
           text-decoration: none;
         }
         .movie-genre {
           display: flex;
+          flex-wrap: wrap;
+        }
+        .genres-wrapper {
+          margin: 0 -10px;
+           {
+            /* -webkit-box-shadow: inset -22px 0px 14px -18px rgba(255, 255, 255, 1);
+          -moz-box-shadow: inset -22px 0px 14px -18px rgba(255, 255, 255, 1); */
+          }
+        }
+        .genres-wrapper-shade {
+          width: 22px;
+          height: 29px;
+          position: absolute;
+        }
+        .genres-wrapper-shade.right {
+          box-shadow: inset -30px 0px 20px -15px white;
+          right: 0;
+        }
+        .genres-wrapper-shade.left {
+          box-shadow: inset 30px 0px 20px -15px white;
+          left: 0;
+        }
+        .genre-tags {
+          padding: 0 20px;
+
+          display: flex;
+          flex-wrap: nowrap;
+          overflow: scroll;
+        }
+
+        .genre-tags::after {
+          content: '';
+          flex: 0 0 20px;
+        }
+        .genre-tags .genre-tag:first-child {
+          margin-left: 0;
+        }
+        .genre-tags .genre-tag:last-child {
+          margin-right: 0;
         }
         .genre-tag {
-          padding: 5px 8px;
-          border-radius: 15px;
-          font-size: 12px;
+          display: inline-block;
+          flex-shrink: 0;
+          padding: 7px 9px;
+          border-radius: 50px;
+          font-size: 13px;
+          line-height: 13px;
           border: 1px solid ${theme.colors.border};
-          margin-right: 6px;
+          margin: 0 4px;
+          font-weight: 500;
+          color: ${theme.colors.primaryB};
         }
       `}</style>
     </div>

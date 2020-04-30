@@ -31,3 +31,5 @@ const getGenre: GetGenre = (id) =>
   genres.find((g) => g.id === id)?.name ?? 'Unknown'
 
 export default getGenre
+
+export { genres }
