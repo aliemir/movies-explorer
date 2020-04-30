@@ -10,6 +10,7 @@ import Header from '../components/Header'
 import getGenre, { genres, Genre } from '../utils/getGenre'
 import theme from '../styles/theme'
 import Genres from '../components/Genres'
+import StarSVG from '../components/Star'
 
 interface MovieItem {
   posterPath: string | undefined
@@ -21,6 +22,25 @@ interface MovieItem {
 
 interface AppProps {
   movies: Array<MovieItem>
+}
+
+interface StarsProps {
+  color: string
+}
+const Stars: React.FC<StarsProps> = ({ color }) => {
+  const stars = []
+  for (let i = 0; i < 5; i++) {
+    stars.push(
+      <StarSVG
+        key={i}
+        height="15"
+        width="15"
+        className="star-svg"
+        color={color}
+      />,
+    )
+  }
+  return <>{stars}</>
 }
 
 const Index: NextPage<AppProps> = ({ movies }) => {
@@ -48,10 +68,17 @@ const Index: NextPage<AppProps> = ({ movies }) => {
           <div key={m.id} className="movie-item">
             <div className="movie-poster">
               {!!m.posterPath ? (
-                <img
-                  src={`https://image.tmdb.org/t/p/w154/${m.posterPath}`}
-                  alt={`${m.title} poster`}
-                />
+                <Link
+                  href="/movie/[id]/[title]"
+                  as={`/movie/${m.id}/${titleToURL(m.title)}`}
+                >
+                  <a>
+                    <img
+                      src={`https://image.tmdb.org/t/p/w154/${m.posterPath}`}
+                      alt={`${m.title} poster`}
+                    />
+                  </a>
+                </Link>
               ) : (
                 <div className="fallback" />
               )}
@@ -66,7 +93,21 @@ const Index: NextPage<AppProps> = ({ movies }) => {
                 </Link>
               </div>
               <div className="movie-info-detail">
-                <div className="movie-rating">{`${m.rating}/10`}</div>
+                <div className="movie-rating">
+                  <div className="movie-rating-stars back">
+                    <Stars color={theme.colors.grayB} />
+                  </div>
+                  <div
+                    className="movie-rating-stars"
+                    style={{
+                      clipPath: `polygon(0 0, ${m.rating * 10}% 0, ${
+                        m.rating * 10
+                      }% 100%, 0% 100%)`,
+                    }}
+                  >
+                    <Stars color={theme.colors.yellow} />
+                  </div>
+                </div>
                 <div className="movie-genres">
                   <span className="genre line-limit limit-two">
                     {m.genres.map((g) => getGenre(g)).join(', ')}
@@ -92,14 +133,22 @@ const Index: NextPage<AppProps> = ({ movies }) => {
           flex-direction: row;
           border-radius: 12px;
           box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+          transition: 0.3s box-shadow ease;
           padding: 0 15px;
           margin: 15px;
           margin-bottom: 30px;
         }
+        .movie-item:active {
+          box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.6);
+        }
+        .movie-item:active .movie-poster {
+          margin-top: -10px;
+        }
         .movie-poster {
           margin-top: -25px;
+          transition: 0.3s margin ease;
         }
-        .movie-poster > * {
+        .movie-poster > a > * {
           border-radius: 10px;
           box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5);
         }
@@ -135,12 +184,22 @@ const Index: NextPage<AppProps> = ({ movies }) => {
           padding-bottom: 10px;
         }
         .movie-rating {
+          position: relative;
+          box-sizing: border-box;
           font-weight: ${theme.fontWeight.semi};
-          font-size: 0.7em;
-          padding-bottom: 10px;
+          font-size: 0.75em;
+          padding-bottom: 5px;
+        }
+        .movie-rating-stars {
+          display: inline;
+          height: 15px;
+        }
+        .movie-rating-stars.back {
+          position: absolute;
+          left: 0;
         }
         .movie-genres {
-          font-size: 0.7em;
+          font-size: 0.75em;
           color: ${theme.colors.primaryC};
         }
         .line-limit {
@@ -153,21 +212,6 @@ const Index: NextPage<AppProps> = ({ movies }) => {
         }
         .line-limit.limit-three {
           -webkit-line-clamp: 3;
-        }
-
-         {
-          /* .movie-item {
-          width: 154px;
-          border-radius: 5px;
-          background-color: #fefefe;
-          margin: 10px 0;
-          transition: 0.3s box-shadow ease;
-        } */
-        }
-         {
-          /* .movie-item:hover {
-          box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.75);
-        } */
         }
       `}</style>
     </div>
