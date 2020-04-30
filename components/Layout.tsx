@@ -1,5 +1,6 @@
 import React from 'react'
 import globalStyles from '../styles/global'
+import Header from './Header'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -8,6 +9,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="page-layout">
+      <Header title="Discover" />
       {children}
       <style jsx global>
         {globalStyles}

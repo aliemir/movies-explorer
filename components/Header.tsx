@@ -1,29 +1,42 @@
 import React from 'react'
+import css from 'styled-jsx/css'
 import theme from '../styles/theme'
 import Link from 'next/link'
+import Navigation from './Navigation'
 
 interface Props {
   title: string
 }
 
+const styles = css`
+header {
+
+}
+a {
+  text-decoration:none;
+}
+h1 {
+  color ${theme.colors.primaryA};
+}
+`
+
 const Header: React.FC<Props> = ({ title }) => {
   return (
     <header>
-      <Link href="/">
-        <a>
-          <h1>{title}</h1>
-        </a>
-      </Link>
-      <style jsx>{`
-        header {
-        }
-        a {
-          text-decoration: none;
-        }
-        h1 {
-          color: ${theme.colors.primaryA};
-        }
-      `}</style>
+      <div className="header-title">
+        <Link href="/">
+          <a>
+            <h1>{title}</h1>
+          </a>
+        </Link>
+      </div>
+      <Navigation
+        onClick={(): void => {
+          /**/
+        }}
+        tabs={['Discover', 'Trending', 'Top100', 'Liked']}
+      />
+      <style jsx>{styles}</style>
     </header>
   )
 }

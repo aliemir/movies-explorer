@@ -28,7 +28,7 @@ const styles = css`
     left: 0;
   }
   .genre-tags {
-    padding: 0 20px;
+    padding: 0 16px;
 
     display: flex;
     flex-wrap: nowrap;
