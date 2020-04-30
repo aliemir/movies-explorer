@@ -5,6 +5,9 @@
 .env
 .env.build
 
+# nextjs
+.next.config-js
+
 # node_modules
 node_modules
 
