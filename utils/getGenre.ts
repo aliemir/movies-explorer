@@ -1,6 +1,6 @@
 type GetGenre = (id: number) => string
 
-type Genre = {
+export type Genre = {
   id: number
   name: string
 }

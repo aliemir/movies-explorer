@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
+import React, { useState } from 'react'
 import { NextPage, GetServerSideProps } from 'next'
 import fetch from 'isomorphic-unfetch'
 import Link from 'next/link'
@@ -7,8 +7,9 @@ import Head from 'next/head'
 import css from 'styled-jsx'
 import titleToURL from '../utils/titleToURL'
 import Header from '../components/Header'
-import getGenre, { genres } from '../utils/getGenre'
+import { genres, Genre } from '../utils/getGenre'
 import theme from '../styles/theme'
+import Genres from '../components/Genres'
 
 interface MovieItem {
   posterPath: string | undefined
@@ -22,23 +23,25 @@ interface AppProps {
 }
 
 const Index: NextPage<AppProps> = ({ movies }) => {
+  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([])
+  const onGenreSelect = (genre: Genre): void => {
+    if (selectedGenres.includes(genre)) {
+      setSelectedGenres([...selectedGenres].filter((g) => g !== genre))
+    } else {
+      setSelectedGenres([...selectedGenres, genre])
+    }
+  }
   return (
     <div>
       <Head>
         <title>Discover</title>
       </Head>
       <Header title="Discover" />
-      <div className="genres-wrapper">
-        <div className="genres-wrapper-shade left"></div>
-        <div className="genres-wrapper-shade right"></div>
-        <div className="genre-tags">
-          {genres.map((g) => (
-            <div className="genre-tag" key={g.id}>
-              {g.name}
-            </div>
-          ))}
-        </div>
-      </div>
+      <Genres
+        genres={genres}
+        selectedGenres={selectedGenres}
+        onSelect={onGenreSelect}
+      />
       <div className="movie-list">
         {movies.map((m) => (
           <div key={m.id}>
@@ -97,56 +100,6 @@ const Index: NextPage<AppProps> = ({ movies }) => {
         .movie-genre {
           display: flex;
           flex-wrap: wrap;
-        }
-        .genres-wrapper {
-          margin: 0 -10px;
-           {
-            /* -webkit-box-shadow: inset -22px 0px 14px -18px rgba(255, 255, 255, 1);
-          -moz-box-shadow: inset -22px 0px 14px -18px rgba(255, 255, 255, 1); */
-          }
-        }
-        .genres-wrapper-shade {
-          width: 22px;
-          height: 29px;
-          position: absolute;
-        }
-        .genres-wrapper-shade.right {
-          box-shadow: inset -30px 0px 20px -15px white;
-          right: 0;
-        }
-        .genres-wrapper-shade.left {
-          box-shadow: inset 30px 0px 20px -15px white;
-          left: 0;
-        }
-        .genre-tags {
-          padding: 0 20px;
-
-          display: flex;
-          flex-wrap: nowrap;
-          overflow: scroll;
-        }
-
-        .genre-tags::after {
-          content: '';
-          flex: 0 0 20px;
-        }
-        .genre-tags .genre-tag:first-child {
-          margin-left: 0;
-        }
-        .genre-tags .genre-tag:last-child {
-          margin-right: 0;
-        }
-        .genre-tag {
-          display: inline-block;
-          flex-shrink: 0;
-          padding: 7px 9px;
-          border-radius: 50px;
-          font-size: 13px;
-          line-height: 13px;
-          border: 1px solid ${theme.colors.border};
-          margin: 0 4px;
-          font-weight: 500;
-          color: ${theme.colors.primaryB};
         }
       `}</style>
     </div>

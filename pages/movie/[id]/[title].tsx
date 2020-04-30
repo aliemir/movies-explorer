@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((res) => res.json())
     .catch((e) => {
       console.log(e)
+      return {}
     })
 
   const props: MovieDetailPageProps = {
