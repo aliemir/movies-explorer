@@ -1,7 +1,6 @@
 import React from 'react'
 import css from 'styled-jsx/css'
 import { Genre } from '../utils/getGenre'
-import theme from '../styles/theme'
 import GenreTag from './GenreTag'
 
 interface GenresProps {

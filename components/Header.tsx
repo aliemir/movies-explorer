@@ -9,15 +9,19 @@ interface Props {
 }
 
 const styles = css`
-header {
-
-}
-a {
-  text-decoration:none;
-}
-h1 {
-  color ${theme.colors.primaryA};
-}
+  header {
+    margin-bottom: 5px;
+  }
+  .header-title {
+    padding: 15px 8px 20px;
+  }
+  a {
+    text-decoration:none;
+  }
+  h1 {
+    margin: 0;
+    color ${theme.colors.primaryA};
+  }
 `
 
 const Header: React.FC<Props> = ({ title }) => {

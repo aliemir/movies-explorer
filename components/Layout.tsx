@@ -1,6 +1,7 @@
 import React from 'react'
 import globalStyles from '../styles/global'
 import Header from './Header'
+import Footer from './Footer'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -11,6 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="page-layout">
       <Header title="Discover" />
       {children}
+      <Footer />
       <style jsx global>
         {globalStyles}
       </style>
