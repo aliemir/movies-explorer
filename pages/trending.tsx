@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 import MovieList, { MovieItemInterface } from '../components/MovieList'
+import Loading from '../components/Loading'
 
 interface MovieData {
   poster_path: string | null
@@ -15,7 +16,9 @@ interface MovieData {
 }
 
 const Discover: NextPage = () => {
-  const [movies, setMovies] = useState<MovieItemInterface[]>([])
+  const [movies, setMovies] = useState<MovieItemInterface[] | undefined>(
+    undefined,
+  )
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -38,21 +41,24 @@ const Discover: NextPage = () => {
             id: m.id,
           }
           return movie
-        }) ?? []
+        }) ?? undefined
 
       setMovies(movies)
     }
-    fetchData()
+    const delayedFetch = setTimeout(() => fetchData(), 500)
+    return (): void => {
+      clearTimeout(delayedFetch)
+    }
   }, [])
 
   return (
-    <div>
+    <>
       <Head>
         <title>Movies - Trending Weekly</title>
       </Head>
-      <MovieList movies={movies} />
+      {movies ? <MovieList movies={movies} /> : <Loading />}
       <style jsx>{``}</style>
-    </div>
+    </>
   )
 }
 

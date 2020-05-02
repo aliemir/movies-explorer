@@ -51,24 +51,26 @@ const styles = css`
   }
 `
 
-const GenreTag: React.FC<GenreTagProps> = ({
-  name,
-  selected,
-  onClick = (): void => {
-    /**/
+const GenreTag: React.FC<GenreTagProps> = React.memo(
+  ({
+    name,
+    selected,
+    onClick = (): void => {
+      /**/
+    },
+  }) => {
+    return (
+      <>
+        <button
+          className={`genre-tag ${selected && 'selected'}`}
+          onClick={(): void => onClick()}
+        >
+          {name}
+        </button>
+        <style jsx>{styles}</style>
+      </>
+    )
   },
-}) => {
-  return (
-    <>
-      <button
-        className={`genre-tag ${selected && 'selected'}`}
-        onClick={(): void => onClick()}
-      >
-        {name}
-      </button>
-      <style jsx>{styles}</style>
-    </>
-  )
-}
+)
 
 export default GenreTag

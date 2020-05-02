@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, NextRouter } from 'next/router'
 import css from 'styled-jsx/css'
@@ -6,6 +6,8 @@ import theme from '../styles/theme'
 
 const styles = css`
   .navigation-wrapper {
+    padding-top: 15px;
+    paddong-bottom: 10px;
     margin: 0 -10px;
   }
   .navigation-wrapper-shade {
@@ -61,17 +63,6 @@ const styles = css`
     margin: 0 4px;
     cursor: pointer;
   }
-  .active-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: ${theme.colors.secondary};
-    height: 4px;
-    border-radius: 10px;
-    width: 4px;
-    transition: 0.3s left ease;
-    /* transition: 0.2s all cubic-bezier(0.175, 0.885, 0.32, 1.275); */
-  }
 `
 
 interface Tab {
@@ -96,35 +87,57 @@ const tabs: Tab[] = [
     path: '/top100',
     displayName: 'Top100',
   },
-  {
-    id: 3,
-    path: '/liked',
-    displayName: 'Liked',
-  },
+  // {
+  //   id: 3,
+  //   path: '/liked',
+  //   displayName: 'Liked',
+  // },
 ]
 
-const Navigation: React.FC = () => {
-  const [barStyle, setBarStyle] = useState<Record<string, number>>({
-    left: 0,
-    width: 0,
+const ActiveBar: React.FC = () => {
+  const [style, setStyle] = useState({
+    left: '0',
+    width: '0',
   })
-  const router: NextRouter = useRouter()
+  const router = useRouter()
 
-  useLayoutEffect(() => {
-    const activeElement = document.querySelector('.active') as HTMLButtonElement
-    if (activeElement) {
-      setBarStyle({
-        left: activeElement.offsetLeft,
-        width: activeElement.offsetWidth - 20,
-      })
-    } else {
-      // setBarStyle({
-      //   left: -20,
-      //   width: 0,
-      // })
-    }
+  useEffect(() => {
+    const active = tabs.find((t) => t.path === router.pathname)
+    const tabsElement = document.querySelector('.navigation-tabs')
+    tabsElement?.childNodes.forEach((tab) => {
+      if (
+        (tab as HTMLLinkElement).getAttribute('data-pathname') ===
+        active?.displayName
+      ) {
+        setStyle({
+          left: (tab as HTMLLinkElement).offsetLeft + 'px',
+          width: (tab as HTMLLinkElement).offsetWidth - 20 + 'px',
+        })
+      }
+    })
   }, [router.pathname])
 
+  return (
+    <div className="active-bar" style={style}>
+      <style jsx>{`
+        .active-bar {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          background-color: ${theme.colors.secondary};
+          height: 4px;
+          border-radius: 10px;
+          width: 4px;
+          transition-duration: 0.3s;
+          transition-timing-function: ease;
+          transition-property: width, left;
+        }
+      `}</style>
+    </div>
+  )
+}
+
+const Navigation: React.FC = () => {
   return (
     <div className="navigation-wrapper">
       <div className="navigation-wrapper-shade left"></div>
@@ -132,20 +145,16 @@ const Navigation: React.FC = () => {
       <div className="navigation-tabs">
         {tabs.map((t) => (
           <Link href={t.path} key={t.id}>
-            <a
-              className={`navigation-link ${
-                router.pathname === t.path && 'active'
-              }`}
-            >
+            <a data-pathname={t.displayName} className={`navigation-link`}>
               {t.displayName}
             </a>
           </Link>
         ))}
-        <div className="active-bar" style={barStyle}></div>
+        <ActiveBar />
       </div>
       <style jsx>{styles}</style>
     </div>
   )
 }
 
-export default Navigation
+export default React.memo(Navigation)

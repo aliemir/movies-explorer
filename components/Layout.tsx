@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import globalStyles from '../styles/global'
 import Header from './Header'
 import Footer from './Footer'
+import Navigation from './Navigation'
 
 interface LayoutProps {
   children: React.ReactNode

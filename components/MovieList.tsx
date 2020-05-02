@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import css from 'styled-jsx/css'
 import MovieItem from './MovieItem'
 
@@ -24,24 +24,23 @@ const styles = css`
   }
 `
 
-const MovieList: React.FC<MovieListProps> = ({ movies }) => {
+const MovieList: React.FC<MovieListProps> = React.memo(({ movies }) => {
   return (
     <div className="movie-list">
-      {movies.length > 0 &&
-        movies.map((m) => (
-          <MovieItem
-            key={m.id}
-            id={m.id}
-            posterPath={m.posterPath && m.posterPath}
-            genres={m.genres}
-            rating={m.rating}
-            release={m.release}
-            title={m.title}
-          />
-        ))}
+      {movies.map((m) => (
+        <MovieItem
+          key={m.id}
+          id={m.id}
+          posterPath={m.posterPath && m.posterPath}
+          genres={m.genres}
+          rating={m.rating}
+          release={m.release}
+          title={m.title}
+        />
+      ))}
       <style jsx>{styles}</style>
     </div>
   )
-}
+})
 
 export default MovieList
