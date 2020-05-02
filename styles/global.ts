@@ -7,4 +7,7 @@ export default css.global`
     padding: 0;
     font-family: ${theme.fontFamily.default};
   }
+  html {
+    margin-left: calc(100vw - 100%);
+  }
 `
