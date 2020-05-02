@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "homepage": "aliemir.github.io",
   "scripts": {
     "dev": "next",
     "build": "next build",
