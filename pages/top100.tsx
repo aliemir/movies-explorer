@@ -21,6 +21,7 @@ const Top100: NextPage = () => {
   )
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout | null = null
     const fetchData = async (): Promise<void> => {
       const data = await fetch(
         `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.TMDB_API_KEY}`,
@@ -42,12 +43,11 @@ const Top100: NextPage = () => {
           }
           return movie
         }) ?? undefined
-
-      setMovies(movies)
+      timeout = setTimeout(() => setMovies(movies), 500)
     }
-    const delayedFetch = setTimeout(() => fetchData(), 500)
+    fetchData()
     return (): void => {
-      clearTimeout(delayedFetch)
+      if (timeout) clearTimeout(timeout)
     }
   }, [])
 

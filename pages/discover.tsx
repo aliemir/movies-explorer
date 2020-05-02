@@ -24,6 +24,7 @@ const Discover: NextPage = () => {
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([])
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout | null = null
     const fetchData = async (): Promise<void> => {
       const data = await fetch(
         `https://api.themoviedb.org/3/discover/movie?api_key=${
@@ -51,12 +52,11 @@ const Discover: NextPage = () => {
           }
           return movie
         }) ?? undefined
-
-      setMovies(movies)
+      timeout = setTimeout(() => setMovies(movies), 500)
     }
-    const delayedFetch = setTimeout(() => fetchData(), 500)
+    fetchData()
     return (): void => {
-      clearTimeout(delayedFetch)
+      if (timeout) clearTimeout(timeout)
     }
   }, [selectedGenres])
 
