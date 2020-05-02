@@ -8,8 +8,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     <Layout>
       <Head>
         <link
+          rel="preload"
+          as="style"
           href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap"
-          rel="stylesheet"
         />
       </Head>
       <Component {...pageProps} />

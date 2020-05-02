@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import css from 'styled-jsx/css'
-import { GetServerSideProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import fetch from 'isomorphic-unfetch'
 import { Genre } from '../../../utils/getGenre'
-import { ParsedUrlQuery } from 'querystring'
 import theme from '../../../styles/theme'
 import Head from 'next/head'
 
