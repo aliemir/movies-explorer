@@ -10,8 +10,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="page-layout">
-      <Header title="Discover" />
-      {children}
+      <Header />
+      <div className="content">{children}</div>
       <Footer />
       <style jsx global>
         {globalStyles}
@@ -24,6 +24,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             max-width: 840px;
             box-sizing: border-box;
             padding: 10px;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+          }
+          .content {
+            flex: 1;
           }
         `}
       </style>

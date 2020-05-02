@@ -11,6 +11,7 @@ interface MovieItemProps {
   posterPath?: string
   genres: number[]
   rating: number
+  release: string
   title: string
   id: number
 }
@@ -44,24 +45,30 @@ const styles = css`
     flex-direction: row;
     border-radius: 12px;
     box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-    transition: 0.3s box-shadow ease;
     padding: 0 15px;
     margin: 15px;
     margin-bottom: 30px;
   }
   .movie-item:active {
-    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.6);
+    /* box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.6); */
   }
   .movie-item:active .movie-poster {
-    margin-top: -10px;
+    margin-top: -27px;
+  }
+  .movie-item:active .movie-poster > a > * {
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.75);
+    transform: scale(1.05);
   }
   .movie-poster {
-    margin-top: -25px;
+    margin-top: -22px;
     transition: 0.3s margin ease;
   }
   .movie-poster > a > * {
     border-radius: 10px;
     box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5);
+    transition-timing-function: ease;
+    transition-duration: 0.3s;
+    transition-property: box-shadow, transform;
   }
   .movie-poster img {
     width: 96px;
@@ -103,10 +110,20 @@ const styles = css`
     padding-right: 10px;
     margin-right: -10px;
     padding-bottom: 5px;
+    cursor: pointer;
   }
   .movie-info-detail {
     margin-top: auto;
     padding-bottom: 10px;
+  }
+  .movie-release-rating {
+    display: flex;
+  }
+  .movie-release {
+    font-size: 12px;
+    color: ${theme.colors.grayA};
+    padding-right: 15px;
+    line-height: 15px;
   }
   .movie-rating {
     position: relative;
@@ -144,6 +161,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
   posterPath,
   genres,
   rating,
+  release,
   title,
   id,
 }) => {
@@ -191,19 +209,22 @@ const MovieItem: React.FC<MovieItemProps> = ({
           </button>
         </div>
         <div className="movie-info-detail">
-          <div className="movie-rating">
-            <div className="movie-rating-stars back">
-              <Stars color={theme.colors.grayB} />
-            </div>
-            <div
-              className="movie-rating-stars"
-              style={{
-                clipPath: `polygon(0 0, ${rating * 10}% 0, ${
-                  rating * 10
-                }% 100%, 0% 100%)`,
-              }}
-            >
-              <Stars color={theme.colors.yellow} />
+          <div className="movie-release-rating">
+            <div className="movie-release">{release}</div>
+            <div className="movie-rating">
+              <div className="movie-rating-stars back">
+                <Stars color={theme.colors.grayB} />
+              </div>
+              <div
+                className="movie-rating-stars"
+                style={{
+                  clipPath: `polygon(0 0, ${rating * 10}% 0, ${
+                    rating * 10
+                  }% 100%, 0% 100%)`,
+                }}
+              >
+                <Stars color={theme.colors.yellow} />
+              </div>
             </div>
           </div>
           <div className="movie-genres">

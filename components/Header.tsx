@@ -4,10 +4,6 @@ import theme from '../styles/theme'
 import Link from 'next/link'
 import Navigation from './Navigation'
 
-interface Props {
-  title: string
-}
-
 const styles = css`
   header {
     margin-bottom: 5px;
@@ -24,7 +20,9 @@ const styles = css`
   }
 `
 
-const Header: React.FC<Props> = ({ title }) => {
+const title = 'Movies'
+
+const Header: React.FC = () => {
   return (
     <header>
       <div className="header-title">
@@ -34,12 +32,7 @@ const Header: React.FC<Props> = ({ title }) => {
           </a>
         </Link>
       </div>
-      <Navigation
-        onClick={(): void => {
-          /**/
-        }}
-        tabs={['Discover', 'Trending', 'Top100', 'Liked']}
-      />
+      <Navigation />
       <style jsx>{styles}</style>
     </header>
   )

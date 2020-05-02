@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
+import Link from 'next/link'
 import { useRouter, NextRouter } from 'next/router'
 import css from 'styled-jsx/css'
 import theme from '../styles/theme'
-
-interface NavigationProps {
-  onClick: () => void
-  tabs: string[]
-}
 
 const styles = css`
   .navigation-wrapper {
@@ -51,7 +47,10 @@ const styles = css`
   .navigation-tabs > *:last-child {
     margin-right: 0;
   }
-  .navigation-button {
+  .navigation-link {
+    display: block;
+    text-decoration: none;
+    color: ${theme.colors.primaryA};
     border: none;
     background: none;
     outline: none;
@@ -60,6 +59,7 @@ const styles = css`
     font-size: 18px;
     font-weight: ${theme.fontWeight.semi};
     margin: 0 4px;
+    cursor: pointer;
   }
   .active-bar {
     position: absolute;
@@ -69,41 +69,77 @@ const styles = css`
     height: 4px;
     border-radius: 10px;
     width: 4px;
-    transition: 0.2s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 0.3s left ease;
+    /* transition: 0.2s all cubic-bezier(0.175, 0.885, 0.32, 1.275); */
   }
 `
 
-const Navigation: React.FC<NavigationProps> = ({ onClick, tabs }) => {
-  const [barStyle, setBarStyle] = useState<Record<string, number>>({
-    left: 20,
-    width: 54,
-  })
+interface Tab {
+  id: number
+  path: string
+  displayName: string
+}
 
+const tabs: Tab[] = [
+  {
+    id: 0,
+    path: '/',
+    displayName: 'Discover',
+  },
+  {
+    id: 1,
+    path: '/trending',
+    displayName: 'Trending',
+  },
+  {
+    id: 2,
+    path: '/top100',
+    displayName: 'Top100',
+  },
+  {
+    id: 3,
+    path: '/liked',
+    displayName: 'Liked',
+  },
+]
+
+const Navigation: React.FC = () => {
+  const [barStyle, setBarStyle] = useState<Record<string, number>>({
+    left: 0,
+    width: 0,
+  })
   const router: NextRouter = useRouter()
-  const handleTabClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): void => {
-    setBarStyle({
-      left: event.currentTarget.offsetLeft,
-      width: event.currentTarget.offsetWidth - 20,
-    })
-  }
-  useEffect(() => {
-    console.log(router.asPath)
-  }, [router])
+
+  useLayoutEffect(() => {
+    const activeElement = document.querySelector('.active') as HTMLButtonElement
+    if (activeElement) {
+      setBarStyle({
+        left: activeElement.offsetLeft,
+        width: activeElement.offsetWidth - 20,
+      })
+    } else {
+      // setBarStyle({
+      //   left: -20,
+      //   width: 0,
+      // })
+    }
+  }, [router.pathname])
+
   return (
     <div className="navigation-wrapper">
       <div className="navigation-wrapper-shade left"></div>
       <div className="navigation-wrapper-shade right"></div>
       <div className="navigation-tabs">
         {tabs.map((t) => (
-          <button
-            className="navigation-button"
-            key={t}
-            onClick={handleTabClick}
-          >
-            {t}
-          </button>
+          <Link href={t.path} key={t.id}>
+            <a
+              className={`navigation-link ${
+                router.pathname === t.path && 'active'
+              }`}
+            >
+              {t.displayName}
+            </a>
+          </Link>
         ))}
         <div className="active-bar" style={barStyle}></div>
       </div>
