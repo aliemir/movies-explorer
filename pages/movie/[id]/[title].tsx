@@ -7,6 +7,7 @@ import { Genre } from '../../../utils/getGenre'
 import theme from '../../../styles/theme'
 import Head from 'next/head'
 import Loading from '../../../components/Loading'
+import Recommendations from '../../../components/Recommendations'
 
 interface MovieDetailInterface {
   id: number
@@ -115,7 +116,7 @@ const styles = css`
     border-radius: 50px;
     font-size: 13px;
     line-height: 13px;
-    margin: 0 4px;
+    margin: 4px 4px;
     font-weight: 400;
     color: ${theme.colors.primaryB};
     border: 1px solid ${theme.colors.grayA};
@@ -247,6 +248,7 @@ const MovieDetailPage: NextPage = () => {
           <div className="movie-overview">
             <p>{movie.overview}</p>
           </div>
+          <Recommendations movieId={movie.id} />
         </div>
         <style jsx>{styles}</style>
       </div>

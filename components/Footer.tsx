@@ -3,7 +3,6 @@ import css from 'styled-jsx/css'
 import theme from '../styles/theme'
 import GithubSVG from './Github'
 import TwitterSVG from './Twitter'
-import Link from 'next/link'
 
 const styles = css`
   footer {

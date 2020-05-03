@@ -26,7 +26,7 @@ const Discover: NextPage = () => {
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null
     const fetchData = async (): Promise<void> => {
-      const data = await fetch(
+      await fetch(
         `https://api.themoviedb.org/3/discover/movie?api_key=${
           process.env.TMDB_API_KEY
         }${
