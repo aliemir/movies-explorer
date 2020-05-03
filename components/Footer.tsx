@@ -1,19 +1,20 @@
 import React from 'react'
 import css from 'styled-jsx/css'
 import theme from '../styles/theme'
+import GithubSVG from './Github'
+import TwitterSVG from './Twitter'
+import Link from 'next/link'
 
 const styles = css`
   footer {
-    padding: 20px;
-    margin: -10px;
+    border-top: 1px solid ${theme.colors.grayB};
+    padding-top: 15px;
+    padding-bottom: 5px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
   }
-  .footer-author {
-    font-weight: ${theme.fontWeight.regular};
-    text-align: center;
-    color: ${theme.colors.primaryA};
-    font-weight: ${theme.fontWeight.semi};
+  .footer-link {
+    padding: 0 10px;
   }
 `
 
@@ -21,7 +22,12 @@ const Footer: React.FC = () => {
   return (
     <>
       <footer>
-        <div className="footer-author">@aliemir</div>
+        <a className="footer-link" href="https://github.com/aliemir">
+          <GithubSVG width={24} fill={theme.colors.primaryB} />
+        </a>
+        <a className="footer-link" href="https://twitter.com/aliemirsen">
+          <TwitterSVG width={24} fill={theme.colors.primaryB} />
+        </a>
       </footer>
       <style jsx>{styles}</style>
     </>
