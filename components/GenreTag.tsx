@@ -11,6 +11,7 @@ interface GenreTagProps {
 
 const styles = css`
   .genre-tag {
+    cursor: pointer;
     user-select: none;
     display: inline-block;
     background: ${theme.colors.background};
@@ -47,6 +48,11 @@ const styles = css`
     }
     100% {
       transform: scale(1);
+    }
+  }
+  @media screen and (min-width: ${theme.breakpoint.m}) {
+    .genre-tag {
+      margin: 3px 4px;
     }
   }
 `

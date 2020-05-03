@@ -1,11 +1,16 @@
 const theme = {
   fontFamily: {
-    default: '"Open Sans", sans-serif',
+    default: 'sans-serif',
   },
   fontWeight: {
     regular: 400,
     semi: 600,
     bold: 700,
+  },
+  breakpoint: {
+    sm: '400px',
+    m: '768px',
+    lg: '1024px',
   },
   colors: {
     background: '#FFFFFF',

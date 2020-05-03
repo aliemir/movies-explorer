@@ -2,6 +2,7 @@ import React from 'react'
 import css from 'styled-jsx/css'
 import { Genre } from '../utils/getGenre'
 import GenreTag from './GenreTag'
+import theme from '../styles/theme'
 
 interface GenresProps {
   onSelect: (genre: Genre) => void
@@ -44,11 +45,11 @@ const styles = css`
     content: '';
     flex: 0 0 20px;
   }
-  .genre-tags > *:first-child {
-    margin-left: 0;
-  }
-  .genre-tags > *:last-child {
-    margin-right: 0;
+  @media screen and (min-width: ${theme.breakpoint.m}) {
+    .genre-tags {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 `
 

@@ -35,24 +35,32 @@ const Discover: NextPage = () => {
             : ''
         }`,
       )
+        .then((res) => {
+          if (res.status >= 200 && res.status < 300) {
+            return res
+          } else {
+            throw res.statusText
+          }
+        })
         .then((res) => res.json())
+        .then((data) => {
+          const movies: MovieItemInterface[] =
+            data.results?.map((m: MovieData) => {
+              const movie: MovieItemInterface = {
+                posterPath: m.poster_path ?? undefined,
+                genres: m.genre_ids,
+                rating: m.vote_average,
+                release: m.release_date.substring(0, 4),
+                title: m.title,
+                id: m.id,
+              }
+              return movie
+            }) ?? undefined
+          timeout = setTimeout(() => setMovies(movies), 500)
+        })
         .catch((e) => {
           console.log(e)
         })
-
-      const movies: MovieItemInterface[] =
-        data.results?.map((m: MovieData) => {
-          const movie: MovieItemInterface = {
-            posterPath: m.poster_path ?? undefined,
-            genres: m.genre_ids,
-            rating: m.vote_average,
-            release: m.release_date.substring(0, 4),
-            title: m.title,
-            id: m.id,
-          }
-          return movie
-        }) ?? undefined
-      timeout = setTimeout(() => setMovies(movies), 500)
     }
     fetchData()
     return (): void => {

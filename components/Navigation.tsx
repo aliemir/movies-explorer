@@ -50,6 +50,7 @@ const styles = css`
     margin-right: 0;
   }
   .navigation-link {
+    user-select: none;
     display: block;
     text-decoration: none;
     color: ${theme.colors.primaryA};
@@ -104,17 +105,24 @@ const ActiveBar: React.FC = () => {
   useEffect(() => {
     const active = tabs.find((t) => t.path === router.pathname)
     const tabsElement = document.querySelector('.navigation-tabs')
-    tabsElement?.childNodes.forEach((tab) => {
-      if (
-        (tab as HTMLLinkElement).getAttribute('data-pathname') ===
-        active?.displayName
-      ) {
-        setStyle({
-          left: (tab as HTMLLinkElement).offsetLeft + 'px',
-          width: (tab as HTMLLinkElement).offsetWidth - 20 + 'px',
-        })
-      }
-    })
+    if (!!active) {
+      tabsElement?.childNodes.forEach((tab) => {
+        if (
+          (tab as HTMLLinkElement).getAttribute('data-pathname') ===
+          active?.displayName
+        ) {
+          setStyle({
+            left: (tab as HTMLLinkElement).offsetLeft + 'px',
+            width: (tab as HTMLLinkElement).offsetWidth - 20 + 'px',
+          })
+        }
+      })
+    } else {
+      setStyle({
+        left: '0',
+        width: '0',
+      })
+    }
   }, [router.pathname])
 
   return (
@@ -144,7 +152,7 @@ const Navigation: React.FC = () => {
       <div className="navigation-wrapper-shade right"></div>
       <div className="navigation-tabs">
         {tabs.map((t) => (
-          <Link href={t.path} key={t.id}>
+          <Link href={t.path} key={t.id} passHref={true}>
             <a data-pathname={t.displayName} className={`navigation-link`}>
               {t.displayName}
             </a>
