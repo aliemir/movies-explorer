@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, NextRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import css from 'styled-jsx/css'
 import theme from '../styles/theme'
+import tabs from '../utils/tabs'
 
 const styles = css`
   .navigation-wrapper {
@@ -65,35 +66,6 @@ const styles = css`
     cursor: pointer;
   }
 `
-
-interface Tab {
-  id: number
-  path: string
-  displayName: string
-}
-
-const tabs: Tab[] = [
-  {
-    id: 0,
-    path: '/',
-    displayName: 'Discover',
-  },
-  {
-    id: 1,
-    path: '/trending',
-    displayName: 'Trending',
-  },
-  {
-    id: 2,
-    path: '/top100',
-    displayName: 'Top100',
-  },
-  // {
-  //   id: 3,
-  //   path: '/liked',
-  //   displayName: 'Liked',
-  // },
-]
 
 const ActiveBar: React.FC = () => {
   const [style, setStyle] = useState({

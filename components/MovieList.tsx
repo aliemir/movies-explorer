@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import css from 'styled-jsx/css'
 import MovieItem from './MovieItem'
+import useSwipeNavigation from '../utils/useSwipeNavigation'
 
 export interface MovieItemInterface {
   posterPath: string | undefined
@@ -25,8 +26,9 @@ const styles = css`
 `
 
 const MovieList: React.FC<MovieListProps> = React.memo(({ movies }) => {
+  const handlers = useSwipeNavigation()
   return (
-    <div className="movie-list">
+    <div className="movie-list" {...handlers}>
       {movies.map((m) => (
         <MovieItem
           key={m.id}

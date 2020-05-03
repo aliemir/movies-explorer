@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, RefObject } from 'react'
 import Error from 'next/error'
 import css from 'styled-jsx/css'
 import { NextPage } from 'next'
@@ -8,6 +8,7 @@ import theme from '../../../styles/theme'
 import Head from 'next/head'
 import Loading from '../../../components/Loading'
 import Recommendations from '../../../components/Recommendations'
+import useSwipeNavigation from '../../../utils/useSwipeNavigation'
 
 interface MovieDetailInterface {
   id: number
@@ -78,11 +79,12 @@ const styles = css`
     font-weight: ${theme.fontWeight.bold};
   }
   .movie-details {
-    padding-top: 20px;
+    /* padding-top: 20px; */
   }
   .movie-release-rating {
     display: flex;
     justify-content: space-around;
+    padding-top: 10px;
   }
   .movie-release-rating > div {
     padding: 7px 14px;
@@ -152,6 +154,8 @@ const MovieDetailPage: NextPage = () => {
   const [movie, setMovie] = useState<MovieDetailInterface | undefined>(
     undefined,
   )
+  const recommendationRef = useRef<HTMLElement>(null)
+  const handlers = useSwipeNavigation([recommendationRef])
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -201,7 +205,7 @@ const MovieDetailPage: NextPage = () => {
     return <Loading />
   } else {
     return (
-      <div className="movie-details">
+      <div className="movie-details" {...handlers}>
         <Head>
           <title>{`Movies - ${movie.title}`}</title>
         </Head>
@@ -242,13 +246,17 @@ const MovieDetailPage: NextPage = () => {
           </div>
           <div className="movie-genres">
             {movie.genres?.map((g) => (
-              <div className="genre-tag">{g.name}</div>
+              <div className="genre-tag" key={g.id}>
+                {g.name}
+              </div>
             ))}
           </div>
           <div className="movie-overview">
             <p>{movie.overview}</p>
           </div>
-          <Recommendations movieId={movie.id} />
+          <div ref={recommendationRef as RefObject<HTMLDivElement>}>
+            <Recommendations movieId={movie.id} />
+          </div>
         </div>
         <style jsx>{styles}</style>
       </div>
